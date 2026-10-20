@@ -1,0 +1,2448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N7 Company — Central de Captação</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Arial,sans-serif;
+}
+
+:root{
+    --red:#e50914;
+    --red-dark:#b20710;
+    --black:#080808;
+    --dark:#111;
+    --card:#151515;
+    --border:#272727;
+    --white:#fff;
+    --gray:#999;
+    --green:#19c37d;
+    --yellow:#f5b942;
+}
+
+body{
+    background:#080808;
+    color:#fff;
+    min-height:100vh;
+}
+
+button,input,select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    display:flex;
+    min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:240px;
+    background:#0d0d0d;
+    border-right:1px solid #222;
+    padding:25px 15px;
+    position:fixed;
+    height:100vh;
+    left:0;
+    top:0;
+}
+
+.logo{
+    font-size:26px;
+    font-weight:900;
+    margin-bottom:35px;
+    padding:0 10px;
+}
+
+.logo span{
+    color:var(--red);
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+}
+
+.menu button{
+    border:0;
+    background:transparent;
+    color:#aaa;
+    text-align:left;
+    padding:14px;
+    border-radius:10px;
+    transition:.2s;
+}
+
+.menu button:hover,
+.menu button.active{
+    background:#1a1a1a;
+    color:#fff;
+}
+
+.menu button.active{
+    border-left:3px solid var(--red);
+}
+
+/* MAIN */
+
+.main{
+    margin-left:240px;
+    width:calc(100% - 240px);
+    padding:25px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    margin-bottom:20px;
+}
+
+.topbar h1{
+    font-size:28px;
+}
+
+.topbar p{
+    color:#888;
+    margin-top:5px;
+}
+
+.date{
+    background:#141414;
+    border:1px solid #252525;
+    padding:12px 15px;
+    border-radius:10px;
+    color:#aaa;
+    font-size:13px;
+}
+
+/* FILTRO DE DATA */
+
+.date-filter{
+    background:#121212;
+    border:1px solid #252525;
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:20px;
+}
+
+.date-filter-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+}
+
+.date-filter-title{
+    font-size:14px;
+    font-weight:700;
+}
+
+.date-filter-subtitle{
+    color:#666;
+    font-size:11px;
+    margin-top:4px;
+}
+
+.date-controls{
+    display:grid;
+    grid-template-columns:180px 1fr 1fr 1fr auto;
+    gap:10px;
+    align-items:end;
+}
+
+.date-field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.date-field label{
+    font-size:11px;
+    color:#777;
+}
+
+.date-field select,
+.date-field input{
+    width:100%;
+    background:#0b0b0b;
+    color:#fff;
+    border:1px solid #292929;
+    border-radius:9px;
+    padding:11px;
+    outline:none;
+}
+
+.date-field select:focus,
+.date-field input:focus{
+    border-color:var(--red);
+}
+
+.date-field.disabled{
+    opacity:.35;
+    pointer-events:none;
+}
+
+.period-result{
+    margin-top:12px;
+    color:#777;
+    font-size:12px;
+}
+
+.period-result strong{
+    color:#fff;
+}
+
+/* CARDS */
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.card{
+    background:#121212;
+    border:1px solid #252525;
+    border-radius:16px;
+    padding:20px;
+    position:relative;
+    overflow:hidden;
+}
+
+.card::after{
+    content:"";
+    position:absolute;
+    width:80px;
+    height:80px;
+    background:var(--red);
+    filter:blur(60px);
+    opacity:.15;
+    right:-30px;
+    top:-30px;
+}
+
+.card-label{
+    color:#888;
+    font-size:13px;
+    margin-bottom:12px;
+}
+
+.card-value{
+    font-size:30px;
+    font-weight:800;
+}
+
+.card-small{
+    margin-top:8px;
+    font-size:12px;
+    color:#777;
+}
+
+.red{
+    color:var(--red);
+}
+
+.green{
+    color:var(--green);
+}
+
+.yellow{
+    color:var(--yellow);
+}
+
+/* GRID */
+
+.grid{
+    display:grid;
+    grid-template-columns:1.5fr 1fr;
+    gap:20px;
+}
+
+.panel{
+    background:#121212;
+    border:1px solid #252525;
+    border-radius:16px;
+    padding:20px;
+}
+
+.panel-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+.panel-header h2{
+    font-size:18px;
+}
+
+/* BUTTONS */
+
+.btn{
+    border:0;
+    border-radius:9px;
+    padding:11px 15px;
+    font-weight:700;
+    transition:.2s;
+}
+
+.btn-primary{
+    background:var(--red);
+    color:#fff;
+}
+
+.btn-primary:hover{
+    background:var(--red-dark);
+}
+
+.btn-secondary{
+    background:#222;
+    color:#fff;
+    border:1px solid #333;
+}
+
+.btn-danger{
+    background:#2a1111;
+    color:#ff6b6b;
+    border:1px solid #4b1b1b;
+}
+
+.btn-whatsapp{
+    background:#168c58;
+    color:#fff;
+}
+
+.btn-filter{
+    height:42px;
+}
+
+/* FORM */
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.field{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.field.full{
+    grid-column:1/-1;
+}
+
+.field label{
+    font-size:12px;
+    color:#888;
+}
+
+.field input,
+.field select{
+    width:100%;
+    background:#0b0b0b;
+    color:#fff;
+    border:1px solid #292929;
+    border-radius:9px;
+    padding:12px;
+    outline:none;
+}
+
+.field input:focus,
+.field select:focus{
+    border-color:var(--red);
+}
+
+.form-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:15px;
+}
+
+/* LEADS */
+
+.filters{
+    display:flex;
+    gap:10px;
+    margin-bottom:15px;
+}
+
+.filters input,
+.filters select{
+    background:#0b0b0b;
+    border:1px solid #292929;
+    color:#fff;
+    border-radius:8px;
+    padding:11px;
+    outline:none;
+}
+
+.filters input{
+    flex:1;
+}
+
+.leads{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.lead{
+    border:1px solid #242424;
+    background:#0c0c0c;
+    border-radius:12px;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
+    align-items:center;
+}
+
+.lead-main{
+    min-width:0;
+}
+
+.lead-name{
+    font-weight:800;
+    margin-bottom:5px;
+}
+
+.lead-info{
+    font-size:12px;
+    color:#777;
+    line-height:1.6;
+}
+
+.lead-actions{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+
+.status{
+    display:inline-block;
+    padding:6px 9px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:800;
+    text-transform:uppercase;
+}
+
+.status-novo{
+    background:#202020;
+    color:#bbb;
+}
+
+.status-contatado{
+    background:#17233b;
+    color:#71a7ff;
+}
+
+.status-interessado{
+    background:#302612;
+    color:#f5c45b;
+}
+
+.status-proposta{
+    background:#281b39;
+    color:#bd88ff;
+}
+
+.status-fechado{
+    background:#102c20;
+    color:#48d494;
+}
+
+.status-perdido{
+    background:#321616;
+    color:#ff6969;
+}
+
+.empty{
+    text-align:center;
+    padding:40px 10px;
+    color:#666;
+}
+
+/* PIPELINE */
+
+.pipeline{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.pipeline-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.pipeline-label{
+    width:100px;
+    font-size:12px;
+    color:#aaa;
+}
+
+.pipeline-bar{
+    flex:1;
+    height:8px;
+    background:#222;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.pipeline-fill{
+    height:100%;
+    background:var(--red);
+    border-radius:20px;
+    transition:.3s;
+}
+
+.pipeline-number{
+    width:30px;
+    text-align:right;
+    font-weight:700;
+}
+
+/* MODAL */
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.75);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    z-index:1000;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:100%;
+    max-width:650px;
+    max-height:90vh;
+    overflow:auto;
+    background:#121212;
+    border:1px solid #292929;
+    border-radius:18px;
+    padding:22px;
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.close{
+    background:#222;
+    border:0;
+    color:#fff;
+    width:35px;
+    height:35px;
+    border-radius:50%;
+}
+
+/* MOBILE */
+
+.mobile-nav{
+    display:none;
+}
+
+@media(max-width:1100px){
+
+    .date-controls{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .date-controls .date-field:first-child{
+        grid-column:1/-1;
+    }
+
+    .date-controls .btn-filter{
+        width:100%;
+    }
+
+    .sidebar{
+        display:none;
+    }
+
+    .main{
+        margin-left:0;
+        width:100%;
+        padding:15px;
+        padding-bottom:90px;
+    }
+
+    .cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .mobile-nav{
+        display:flex;
+        position:fixed;
+        bottom:0;
+        left:0;
+        right:0;
+        height:65px;
+        background:#0e0e0e;
+        border-top:1px solid #222;
+        z-index:999;
+        justify-content:space-around;
+        align-items:center;
+    }
+
+    .mobile-nav button{
+        background:none;
+        border:0;
+        color:#888;
+        font-size:11px;
+        padding:10px;
+    }
+
+    .mobile-nav button.active{
+        color:#fff;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .topbar{
+        align-items:flex-start;
+    }
+
+    .topbar h1{
+        font-size:22px;
+    }
+
+    .date{
+        display:none;
+    }
+
+    .cards{
+        gap:10px;
+    }
+
+    .card{
+        padding:15px;
+    }
+
+    .card-value{
+        font-size:24px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .lead{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .lead-actions{
+        width:100%;
+        justify-content:flex-start;
+    }
+
+    .filters{
+        flex-direction:column;
+    }
+
+    .panel{
+        padding:15px;
+    }
+
+    .date-controls{
+        grid-template-columns:1fr;
+    }
+
+    .date-controls .date-field:first-child{
+        grid-column:auto;
+    }
+
+    .date-filter-header{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:10px;
+    }
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<aside class="sidebar">
+
+    <div class="logo">
+        N7<span>.</span>
+    </div>
+
+    <div class="menu">
+
+        <button class="active" onclick="scrollToSection('dashboard')">
+            Dashboard
+        </button>
+
+        <button onclick="abrirModal()">
+            + Novo Lead
+        </button>
+
+        <button onclick="scrollToSection('leadsSection')">
+            Meus Leads
+        </button>
+
+        <button onclick="exportarCSV()">
+            Exportar Leads
+        </button>
+
+    </div>
+
+</aside>
+
+<main class="main">
+
+<section id="dashboard">
+
+    <div class="topbar">
+
+        <div>
+            <h1>Central de Captação</h1>
+            <p>Controle comercial da N7 Company</p>
+        </div>
+
+        <div class="date" id="dataAtual"></div>
+
+    </div>
+
+    <!-- FILTRO DE PERÍODO -->
+
+    <div class="date-filter">
+
+        <div class="date-filter-header">
+
+            <div>
+                <div class="date-filter-title">
+                    Período de análise
+                </div>
+
+                <div class="date-filter-subtitle">
+                    Escolha dia, mês ou ano para analisar sua captação.
+                </div>
+            </div>
+
+            <button
+                class="btn btn-secondary"
+                onclick="limparFiltroData()"
+            >
+                Limpar filtro
+            </button>
+
+        </div>
+
+        <div class="date-controls">
+
+            <div class="date-field">
+
+                <label>Tipo de período</label>
+
+                <select
+                    id="tipoPeriodo"
+                    onchange="alterarTipoPeriodo()"
+                >
+
+                    <option value="todos">
+                        Todos os períodos
+                    </option>
+
+                    <option value="dia">
+                        Dia específico
+                    </option>
+
+                    <option value="mes">
+                        Mês específico
+                    </option>
+
+                    <option value="ano">
+                        Ano específico
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div
+                class="date-field"
+                id="campoDia"
+            >
+
+                <label>Escolher dia</label>
+
+                <input
+                    type="date"
+                    id="filtroDia"
+                    onchange="aplicarFiltroData()"
+                >
+
+            </div>
+
+            <div
+                class="date-field"
+                id="campoMes"
+            >
+
+                <label>Escolher mês</label>
+
+                <input
+                    type="month"
+                    id="filtroMes"
+                    onchange="aplicarFiltroData()"
+                >
+
+            </div>
+
+            <div
+                class="date-field"
+                id="campoAno"
+            >
+
+                <label>Escolher ano</label>
+
+                <select
+                    id="filtroAno"
+                    onchange="aplicarFiltroData()"
+                >
+                </select>
+
+            </div>
+
+            <button
+                class="btn btn-primary btn-filter"
+                onclick="aplicarFiltroData()"
+            >
+                Aplicar
+            </button>
+
+        </div>
+
+        <div class="period-result">
+            Visualizando:
+            <strong id="periodoAtual">
+                Todos os períodos
+            </strong>
+        </div>
+
+    </div>
+
+    <!-- CARDS -->
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="card-label">Leads captados</div>
+            <div class="card-value red" id="leadsHoje">0</div>
+            <div class="card-small">
+                Leads dentro do período selecionado
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-label">Interessados</div>
+            <div class="card-value yellow" id="interessados">0</div>
+            <div class="card-small">
+                Leads com interesse real
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-label">Propostas</div>
+            <div class="card-value" id="propostas">0</div>
+            <div class="card-small">
+                Propostas em negociação
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-label">Contratos fechados</div>
+            <div class="card-value green" id="fechados">0</div>
+            <div class="card-small">
+                Clientes convertidos
+            </div>
+        </div>
+
+    </div>
+
+    <div class="grid">
+
+        <div class="panel">
+
+            <div class="panel-header">
+                <h2>Funil de vendas</h2>
+            </div>
+
+            <div class="pipeline">
+
+                <div class="pipeline-row">
+                    <div class="pipeline-label">Novos</div>
+
+                    <div class="pipeline-bar">
+                        <div
+                            class="pipeline-fill"
+                            id="barNovo"
+                        ></div>
+                    </div>
+
+                    <div
+                        class="pipeline-number"
+                        id="numNovo"
+                    >
+                        0
+                    </div>
+                </div>
+
+                <div class="pipeline-row">
+                    <div class="pipeline-label">Contatados</div>
+
+                    <div class="pipeline-bar">
+                        <div
+                            class="pipeline-fill"
+                            id="barContatado"
+                        ></div>
+                    </div>
+
+                    <div
+                        class="pipeline-number"
+                        id="numContatado"
+                    >
+                        0
+                    </div>
+                </div>
+
+                <div class="pipeline-row">
+                    <div class="pipeline-label">Interessados</div>
+
+                    <div class="pipeline-bar">
+                        <div
+                            class="pipeline-fill"
+                            id="barInteressado"
+                        ></div>
+                    </div>
+
+                    <div
+                        class="pipeline-number"
+                        id="numInteressado"
+                    >
+                        0
+                    </div>
+                </div>
+
+                <div class="pipeline-row">
+                    <div class="pipeline-label">Propostas</div>
+
+                    <div class="pipeline-bar">
+                        <div
+                            class="pipeline-fill"
+                            id="barProposta"
+                        ></div>
+                    </div>
+
+                    <div
+                        class="pipeline-number"
+                        id="numProposta"
+                    >
+                        0
+                    </div>
+                </div>
+
+                <div class="pipeline-row">
+                    <div class="pipeline-label">Fechados</div>
+
+                    <div class="pipeline-bar">
+                        <div
+                            class="pipeline-fill"
+                            id="barFechado"
+                        ></div>
+                    </div>
+
+                    <div
+                        class="pipeline-number"
+                        id="numFechado"
+                    >
+                        0
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="panel">
+
+            <div class="panel-header">
+                <h2>Resumo comercial</h2>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:20px;">
+
+                <div>
+                    <div class="card-label">
+                        Taxa de conversão
+                    </div>
+
+                    <div
+                        class="card-value green"
+                        id="conversao"
+                    >
+                        0%
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card-label">
+                        Total de leads
+                    </div>
+
+                    <div
+                        class="card-value"
+                        id="totalLeads"
+                    >
+                        0
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card-label">
+                        Valor potencial
+                    </div>
+
+                    <div
+                        class="card-value red"
+                        id="valorPotencial"
+                    >
+                        R$ 0,00
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<br>
+
+<section class="panel" id="leadsSection">
+
+    <div class="panel-header">
+
+        <div>
+            <h2>Meus Leads</h2>
+
+            <div style="font-size:12px;color:#666;margin-top:5px;">
+                Controle todos os contatos da sua prospecção
+            </div>
+        </div>
+
+        <button
+            class="btn btn-primary"
+            onclick="abrirModal()"
+        >
+            + Adicionar
+        </button>
+
+    </div>
+
+    <div class="filters">
+
+        <input
+            type="text"
+            id="busca"
+            placeholder="Pesquisar lead, empresa ou Instagram..."
+            oninput="renderizarLeads()"
+        >
+
+        <select
+            id="filtroStatus"
+            onchange="renderizarLeads()"
+        >
+
+            <option value="todos">
+                Todos os status
+            </option>
+
+            <option value="Novo">Novo</option>
+            <option value="Contatado">Contatado</option>
+            <option value="Interessado">Interessado</option>
+            <option value="Proposta">Proposta</option>
+            <option value="Fechado">Fechado</option>
+            <option value="Perdido">Perdido</option>
+
+        </select>
+
+    </div>
+
+    <div
+        class="leads"
+        id="listaLeads"
+    ></div>
+
+</section>
+
+</main>
+
+</div>
+
+<div class="mobile-nav">
+
+    <button onclick="scrollToSection('dashboard')">
+        Dashboard
+    </button>
+
+    <button onclick="abrirModal()">
+        + Lead
+    </button>
+
+    <button onclick="scrollToSection('leadsSection')">
+        Leads
+    </button>
+
+    <button onclick="exportarCSV()">
+        Exportar
+    </button>
+
+</div>
+
+<!-- MODAL -->
+
+<div
+    class="modal"
+    id="modal"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-header">
+
+            <h2>Novo Lead</h2>
+
+            <button
+                class="close"
+                onclick="fecharModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <form id="leadForm">
+
+            <div class="form-grid">
+
+                <div class="field">
+
+                    <label>Nome do contato</label>
+
+                    <input
+                        id="nome"
+                        required
+                        placeholder="Ex: João Silva"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label>Empresa</label>
+
+                    <input
+                        id="empresa"
+                        placeholder="Nome da empresa"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label>WhatsApp</label>
+
+                    <input
+                        id="telefone"
+                        placeholder="(00) 00000-0000"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label>Instagram</label>
+
+                    <input
+                        id="instagram"
+                        placeholder="@empresa"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label>Nicho</label>
+
+                    <input
+                        id="nicho"
+                        placeholder="Ex: Restaurante"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label>Origem</label>
+
+                    <select id="origem">
+
+                        <option>Instagram</option>
+                        <option>WhatsApp</option>
+                        <option>Google Maps</option>
+                        <option>Indicação</option>
+                        <option>Facebook</option>
+                        <option>Site</option>
+                        <option>Outro</option>
+
+                    </select>
+
+                </div>
+
+                <div class="field">
+
+                    <label>Status</label>
+
+                    <select id="status">
+
+                        <option>Novo</option>
+                        <option>Contatado</option>
+                        <option>Interessado</option>
+                        <option>Proposta</option>
+                        <option>Fechado</option>
+                        <option>Perdido</option>
+
+                    </select>
+
+                </div>
+
+                <div class="field">
+
+                    <label>Valor potencial</label>
+
+                    <input
+                        id="valor"
+                        type="number"
+                        step="0.01"
+                        placeholder="200"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label>Data da captação</label>
+
+                    <input
+                        id="dataLead"
+                        type="date"
+                    >
+
+                </div>
+
+                <div class="field">
+
+                    <label>Horário da captação</label>
+
+                    <input
+                        id="horaLead"
+                        type="time"
+                    >
+
+                </div>
+
+                <div class="field full">
+
+                    <label>Observação</label>
+
+                    <input
+                        id="observacao"
+                        placeholder="Ex: Pediu para retornar amanhã"
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="fecharModal()"
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Salvar Lead
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+const STORAGE_KEY = "n7_leads";
+
+let leads = JSON.parse(
+    localStorage.getItem(STORAGE_KEY) || "[]"
+);
+
+/* =========================
+   DATA
+========================= */
+
+function hoje(){
+
+    const d = new Date();
+
+    const ano = d.getFullYear();
+
+    const mes = String(
+        d.getMonth()+1
+    ).padStart(2,"0");
+
+    const dia = String(
+        d.getDate()
+    ).padStart(2,"0");
+
+    return `${ano}-${mes}-${dia}`;
+
+}
+
+function horaAtual(){
+
+    const d = new Date();
+
+    const h = String(
+        d.getHours()
+    ).padStart(2,"0");
+
+    const m = String(
+        d.getMinutes()
+    ).padStart(2,"0");
+
+    return `${h}:${m}`;
+
+}
+
+function formatarData(data){
+
+    if(!data) return "";
+
+    const partes = data.split("-");
+
+    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+
+}
+
+function moeda(valor){
+
+    return Number(valor || 0).toLocaleString(
+        "pt-BR",
+        {
+            style:"currency",
+            currency:"BRL"
+        }
+    );
+
+}
+
+function salvar(){
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(leads)
+    );
+
+}
+
+/* =========================
+   FILTRO DE DATA
+========================= */
+
+let filtroData = {
+    tipo:"todos",
+    valor:""
+};
+
+function preencherAnos(){
+
+    const select =
+        document.getElementById("filtroAno");
+
+    const anoAtual =
+        new Date().getFullYear();
+
+    select.innerHTML = "";
+
+    for(
+        let ano = anoAtual - 10;
+        ano <= anoAtual + 5;
+        ano++
+    ){
+
+        const option =
+            document.createElement("option");
+
+        option.value = ano;
+        option.textContent = ano;
+
+        if(ano === anoAtual){
+            option.selected = true;
+        }
+
+        select.appendChild(option);
+
+    }
+
+}
+
+function alterarTipoPeriodo(){
+
+    const tipo =
+        document.getElementById("tipoPeriodo")
+        .value;
+
+    const campoDia =
+        document.getElementById("campoDia");
+
+    const campoMes =
+        document.getElementById("campoMes");
+
+    const campoAno =
+        document.getElementById("campoAno");
+
+    campoDia.classList.add("disabled");
+    campoMes.classList.add("disabled");
+    campoAno.classList.add("disabled");
+
+    if(tipo === "dia"){
+
+        campoDia.classList.remove("disabled");
+
+    }
+
+    if(tipo === "mes"){
+
+        campoMes.classList.remove("disabled");
+
+    }
+
+    if(tipo === "ano"){
+
+        campoAno.classList.remove("disabled");
+
+    }
+
+    aplicarFiltroData();
+
+}
+
+function aplicarFiltroData(){
+
+    const tipo =
+        document.getElementById("tipoPeriodo")
+        .value;
+
+    filtroData.tipo = tipo;
+
+    if(tipo === "dia"){
+
+        filtroData.valor =
+            document.getElementById("filtroDia")
+            .value;
+
+    }
+
+    else if(tipo === "mes"){
+
+        filtroData.valor =
+            document.getElementById("filtroMes")
+            .value;
+
+    }
+
+    else if(tipo === "ano"){
+
+        filtroData.valor =
+            document.getElementById("filtroAno")
+            .value;
+
+    }
+
+    else{
+
+        filtroData.valor = "";
+
+    }
+
+    atualizarTudo();
+
+}
+
+function limparFiltroData(){
+
+    document.getElementById("tipoPeriodo")
+        .value = "todos";
+
+    document.getElementById("filtroDia")
+        .value = "";
+
+    document.getElementById("filtroMes")
+        .value = "";
+
+    filtroData = {
+        tipo:"todos",
+        valor:""
+    };
+
+    alterarTipoPeriodo();
+
+}
+
+function leadDentroDoPeriodo(lead){
+
+    if(filtroData.tipo === "todos"){
+        return true;
+    }
+
+    if(!lead.data){
+        return false;
+    }
+
+    if(filtroData.tipo === "dia"){
+
+        return lead.data === filtroData.valor;
+
+    }
+
+    if(filtroData.tipo === "mes"){
+
+        return lead.data.startsWith(
+            filtroData.valor
+        );
+
+    }
+
+    if(filtroData.tipo === "ano"){
+
+        return lead.data.startsWith(
+            filtroData.valor
+        );
+
+    }
+
+    return true;
+
+}
+
+function getLeadsPeriodo(){
+
+    return leads.filter(
+        lead => leadDentroDoPeriodo(lead)
+    );
+
+}
+
+function atualizarTextoPeriodo(){
+
+    const elemento =
+        document.getElementById("periodoAtual");
+
+    if(filtroData.tipo === "todos"){
+
+        elemento.textContent =
+            "Todos os períodos";
+
+        return;
+
+    }
+
+    if(filtroData.tipo === "dia"){
+
+        if(!filtroData.valor){
+
+            elemento.textContent =
+                "Escolha um dia";
+
+            return;
+
+        }
+
+        elemento.textContent =
+            "Dia " +
+            formatarData(
+                filtroData.valor
+            );
+
+        return;
+
+    }
+
+    if(filtroData.tipo === "mes"){
+
+        if(!filtroData.valor){
+
+            elemento.textContent =
+                "Escolha um mês";
+
+            return;
+
+        }
+
+        const [ano,mes] =
+            filtroData.valor.split("-");
+
+        const data =
+            new Date(
+                Number(ano),
+                Number(mes)-1,
+                1
+            );
+
+        const nomeMes =
+            data.toLocaleDateString(
+                "pt-BR",
+                {
+                    month:"long"
+                }
+            );
+
+        elemento.textContent =
+            nomeMes.charAt(0).toUpperCase() +
+            nomeMes.slice(1) +
+            " de " +
+            ano;
+
+        return;
+
+    }
+
+    if(filtroData.tipo === "ano"){
+
+        elemento.textContent =
+            "Ano " +
+            filtroData.valor;
+
+    }
+
+}
+
+/* =========================
+   MODAL
+========================= */
+
+function abrirModal(){
+
+    document.getElementById("modal")
+        .classList.add("show");
+
+    document.getElementById("dataLead")
+        .value = hoje();
+
+    document.getElementById("horaLead")
+        .value = horaAtual();
+
+}
+
+function fecharModal(){
+
+    document.getElementById("modal")
+        .classList.remove("show");
+
+}
+
+/* =========================
+   NOVO LEAD
+========================= */
+
+document.getElementById("leadForm")
+.addEventListener(
+    "submit",
+    function(e){
+
+        e.preventDefault();
+
+        const dataSelecionada =
+            document.getElementById("dataLead")
+            .value || hoje();
+
+        const horaSelecionada =
+            document.getElementById("horaLead")
+            .value || horaAtual();
+
+        const novoLead = {
+
+            id:Date.now(),
+
+            nome:
+                document.getElementById("nome")
+                .value.trim(),
+
+            empresa:
+                document.getElementById("empresa")
+                .value.trim(),
+
+            telefone:
+                document.getElementById("telefone")
+                .value.trim(),
+
+            instagram:
+                document.getElementById("instagram")
+                .value.trim(),
+
+            nicho:
+                document.getElementById("nicho")
+                .value.trim(),
+
+            origem:
+                document.getElementById("origem")
+                .value,
+
+            status:
+                document.getElementById("status")
+                .value,
+
+            valor:
+                Number(
+                    document.getElementById("valor")
+                    .value || 0
+                ),
+
+            observacao:
+                document.getElementById("observacao")
+                .value.trim(),
+
+            data:dataSelecionada,
+
+            hora:horaSelecionada,
+
+            criadoEm:new Date().toISOString()
+
+        };
+
+        leads.unshift(novoLead);
+
+        salvar();
+
+        document.getElementById("leadForm")
+            .reset();
+
+        fecharModal();
+
+        atualizarTudo();
+
+    }
+);
+
+/* =========================
+   RENDER LEADS
+========================= */
+
+function renderizarLeads(){
+
+    const lista =
+        document.getElementById("listaLeads");
+
+    const busca =
+        document.getElementById("busca")
+        .value
+        .toLowerCase();
+
+    const filtro =
+        document.getElementById("filtroStatus")
+        .value;
+
+    let filtrados =
+        leads.filter(lead => {
+
+            const texto = `
+
+                ${lead.nome}
+                ${lead.empresa}
+                ${lead.instagram}
+                ${lead.nicho}
+                ${lead.telefone}
+
+            `.toLowerCase();
+
+            const correspondeBusca =
+                texto.includes(busca);
+
+            const correspondeStatus =
+                filtro === "todos" ||
+                lead.status === filtro;
+
+            const correspondePeriodo =
+                leadDentroDoPeriodo(lead);
+
+            return (
+                correspondeBusca &&
+                correspondeStatus &&
+                correspondePeriodo
+            );
+
+        });
+
+    if(!filtrados.length){
+
+        lista.innerHTML = `
+            <div class="empty">
+                Nenhum lead encontrado neste período.
+            </div>
+        `;
+
+        return;
+
+    }
+
+    lista.innerHTML =
+        filtrados.map(lead => {
+
+            const statusClass =
+                lead.status
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(
+                    /[\u0300-\u036f]/g,
+                    ""
+                );
+
+            return `
+
+            <div class="lead">
+
+                <div class="lead-main">
+
+                    <div class="lead-name">
+                        ${escapeHTML(lead.nome)}
+                    </div>
+
+                    <div class="lead-info">
+
+                        ${lead.empresa ?
+                        escapeHTML(lead.empresa)
+                        + " • " : ""}
+
+                        ${lead.nicho ?
+                        escapeHTML(lead.nicho)
+                        + " • " : ""}
+
+                        Origem:
+                        ${escapeHTML(lead.origem)}
+
+                        <br>
+
+                        ${lead.telefone ?
+                        escapeHTML(lead.telefone)
+                        : ""}
+
+                        ${lead.instagram ?
+                        " • " +
+                        escapeHTML(lead.instagram)
+                        : ""}
+
+                        <br>
+
+                        Captado em:
+                        ${formatarData(lead.data)}
+
+                        ${lead.hora ?
+                        " às " +
+                        escapeHTML(lead.hora)
+                        : ""}
+
+                        ${lead.valor ?
+                        " • Potencial: " +
+                        moeda(lead.valor)
+                        : ""}
+
+                    </div>
+
+                    ${
+                        lead.observacao
+                        ?
+                        `
+                        <div style="
+                            color:#999;
+                            font-size:12px;
+                            margin-top:6px;
+                        ">
+                            ${escapeHTML(
+                                lead.observacao
+                            )}
+                        </div>
+                        `
+                        :
+                        ""
+                    }
+
+                </div>
+
+                <div class="lead-actions">
+
+                    <span
+                        class="status status-${statusClass}"
+                    >
+                        ${lead.status}
+                    </span>
+
+                    <select
+                        onchange="
+                            alterarStatus(
+                                ${lead.id},
+                                this.value
+                            )
+                        "
+                        style="
+                            background:#151515;
+                            color:#fff;
+                            border:1px solid #292929;
+                            padding:7px;
+                            border-radius:7px;
+                            font-size:11px;
+                        "
+                    >
+
+                        ${[
+                            "Novo",
+                            "Contatado",
+                            "Interessado",
+                            "Proposta",
+                            "Fechado",
+                            "Perdido"
+                        ].map(status => `
+
+                            <option
+                                ${
+                                    lead.status === status
+                                    ? "selected"
+                                    : ""
+                                }
+                            >
+                                ${status}
+                            </option>
+
+                        `).join("")}
+
+                    </select>
+
+                    ${
+                        lead.telefone
+                        ?
+                        `
+                        <button
+                            class="btn btn-whatsapp"
+                            onclick="
+                                abrirWhatsApp(
+                                    '${escapeJS(
+                                        lead.telefone
+                                    )}'
+                                )
+                            "
+                        >
+                            WhatsApp
+                        </button>
+                        `
+                        :
+                        ""
+                    }
+
+                    <button
+                        class="btn btn-danger"
+                        onclick="
+                            excluirLead(${lead.id})
+                        "
+                    >
+                        Excluir
+                    </button>
+
+                </div>
+
+            </div>
+
+            `;
+
+        }).join("");
+
+}
+
+/* =========================
+   STATUS
+========================= */
+
+function alterarStatus(id,status){
+
+    const lead =
+        leads.find(
+            item => item.id === id
+        );
+
+    if(!lead) return;
+
+    lead.status = status;
+
+    salvar();
+
+    atualizarTudo();
+
+}
+
+/* =========================
+   EXCLUIR
+========================= */
+
+function excluirLead(id){
+
+    const lead =
+        leads.find(
+            item => item.id === id
+        );
+
+    if(!lead) return;
+
+    const confirmar =
+        confirm(
+            `Excluir o lead "${lead.nome}"?`
+        );
+
+    if(!confirmar) return;
+
+    leads =
+        leads.filter(
+            item => item.id !== id
+        );
+
+    salvar();
+
+    atualizarTudo();
+
+}
+
+/* =========================
+   WHATSAPP
+========================= */
+
+function abrirWhatsApp(numero){
+
+    const telefone =
+        numero.replace(/\D/g,"");
+
+    if(!telefone) return;
+
+    const numeroFinal =
+        telefone.startsWith("55")
+        ? telefone
+        : "55" + telefone;
+
+    window.open(
+        `https://wa.me/${numeroFinal}`,
+        "_blank"
+    );
+
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function atualizarDashboard(){
+
+    const leadsPeriodo =
+        getLeadsPeriodo();
+
+    const total =
+        leadsPeriodo.length;
+
+    const interessados =
+        leadsPeriodo.filter(
+            lead =>
+                lead.status === "Interessado"
+        ).length;
+
+    const propostas =
+        leadsPeriodo.filter(
+            lead =>
+                lead.status === "Proposta"
+        ).length;
+
+    const fechados =
+        leadsPeriodo.filter(
+            lead =>
+                lead.status === "Fechado"
+        ).length;
+
+    const valor =
+        leadsPeriodo.reduce(
+            (total,lead) =>
+                total + Number(
+                    lead.valor || 0
+                ),
+            0
+        );
+
+    document.getElementById("leadsHoje")
+        .textContent = total;
+
+    document.getElementById("interessados")
+        .textContent = interessados;
+
+    document.getElementById("propostas")
+        .textContent = propostas;
+
+    document.getElementById("fechados")
+        .textContent = fechados;
+
+    document.getElementById("totalLeads")
+        .textContent = total;
+
+    document.getElementById("valorPotencial")
+        .textContent = moeda(valor);
+
+    const conversao =
+        total > 0
+        ? ((fechados / total) * 100)
+            .toFixed(1)
+        : 0;
+
+    document.getElementById("conversao")
+        .textContent =
+            conversao + "%";
+
+    atualizarPipeline(
+        leadsPeriodo
+    );
+
+    atualizarTextoPeriodo();
+
+}
+
+/* =========================
+   PIPELINE
+========================= */
+
+function atualizarPipeline(
+    leadsPeriodo
+){
+
+    const statusList = [
+
+        [
+            "Novo",
+            "barNovo",
+            "numNovo"
+        ],
+
+        [
+            "Contatado",
+            "barContatado",
+            "numContatado"
+        ],
+
+        [
+            "Interessado",
+            "barInteressado",
+            "numInteressado"
+        ],
+
+        [
+            "Proposta",
+            "barProposta",
+            "numProposta"
+        ],
+
+        [
+            "Fechado",
+            "barFechado",
+            "numFechado"
+        ]
+
+    ];
+
+    const total =
+        Math.max(
+            leadsPeriodo.length,
+            1
+        );
+
+    statusList.forEach(item => {
+
+        const status =
+            item[0];
+
+        const quantidade =
+            leadsPeriodo.filter(
+                lead =>
+                    lead.status === status
+            ).length;
+
+        document.getElementById(
+            item[2]
+        ).textContent =
+            quantidade;
+
+        document.getElementById(
+            item[1]
+        ).style.width =
+            (
+                (quantidade / total)
+                * 100
+            ) + "%";
+
+    });
+
+}
+
+/* =========================
+   CSV
+========================= */
+
+function exportarCSV(){
+
+    if(!leads.length){
+
+        alert(
+            "Você ainda não possui leads."
+        );
+
+        return;
+
+    }
+
+    const cabecalho = [
+
+        "Nome",
+        "Empresa",
+        "WhatsApp",
+        "Instagram",
+        "Nicho",
+        "Origem",
+        "Status",
+        "Valor",
+        "Data",
+        "Hora",
+        "Observação"
+
+    ];
+
+    const linhas =
+        leads.map(lead => [
+
+            lead.nome,
+            lead.empresa,
+            lead.telefone,
+            lead.instagram,
+            lead.nicho,
+            lead.origem,
+            lead.status,
+            lead.valor,
+            lead.data,
+            lead.hora,
+            lead.observacao
+
+        ]);
+
+    const csv = [
+
+        cabecalho,
+        ...linhas
+
+    ].map(linha =>
+
+        linha.map(valor =>
+
+            `"${String(valor || "")
+                .replace(
+                    /"/g,
+                    '""'
+                )}"`
+
+        ).join(",")
+
+    ).join("\n");
+
+    const blob =
+        new Blob(
+            [
+                "\ufeff" + csv
+            ],
+            {
+                type:
+                    "text/csv;charset=utf-8;"
+            }
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+        `N7-Leads-${hoje()}.csv`;
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+}
+
+/* =========================
+   UTILIDADES
+========================= */
+
+function escapeHTML(text){
+
+    return String(text || "")
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+function escapeJS(text){
+
+    return String(text || "")
+        .replace(
+            /\\/g,
+            "\\\\"
+        )
+        .replace(
+            /'/g,
+            "\\'"
+        );
+
+}
+
+function scrollToSection(id){
+
+    document.getElementById(id)
+        .scrollIntoView({
+            behavior:"smooth"
+        });
+
+}
+
+function atualizarTudo(){
+
+    renderizarLeads();
+
+    atualizarDashboard();
+
+}
+
+/* =========================
+   DATA DO TOPO
+========================= */
+
+document.getElementById("dataAtual")
+.textContent =
+new Date().toLocaleDateString(
+    "pt-BR",
+    {
+        weekday:"long",
+        day:"2-digit",
+        month:"long",
+        year:"numeric"
+    }
+);
+
+/* =========================
+   INICIALIZAÇÃO
+========================= */
+
+preencherAnos();
+
+document.getElementById("filtroDia")
+    .value = hoje();
+
+document.getElementById("filtroMes")
+    .value = hoje().substring(0,7);
+
+alterarTipoPeriodo();
+
+atualizarTudo();
+
+</script>
+
+</body>
+</html>
